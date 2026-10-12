@@ -1,0 +1,33 @@
+﻿
+@model List<Recipe>
+@{
+    ViewData["Title"] = "Tarifler";
+}
+
+<div class="page-header">
+    <h1>Tüm Tarifler</h1>
+    <p class="mb-0">Toplam @Model.Count tarif listeleniyor</p>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        @foreach (var r in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card recipe-card h-100 shadow-sm">
+                    <img src="@r.ImageUrl" class="card-img-top" alt="@r.Title"
+                         onerror="this.src='https://placehold.co/600x400?text=Tarif'">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0">@r.Title</h5>
+                            <span class="rating-badge">★ @r.Rating</span>
+                        </div>
+                        <p class="text-muted small">@r.Description</p>
+                        <p class="small mb-3">⏱ @(r.PrepTime + r.CookTime) dk &nbsp; 👥 @r.Servings kişilik</p>
+                        <a asp-action="Details" asp-route-id="@r.Id" class="btn btn-lezzet">Tarife Git</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

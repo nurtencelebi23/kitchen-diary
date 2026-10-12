@@ -1,0 +1,56 @@
+﻿@model List<Recipe>
+@{
+    ViewData["Title"] = "Ana Sayfa";
+    var categories = (List<Category>)ViewBag.Categories;
+}
+
+<section class="hero">
+    <div class="container">
+        <h1>Bugün ne pişirsek?</h1>
+        <p class="lead mb-4">Binlerce ev yapımı tarif, tek bir defterde.</p>
+        <a asp-controller="Recipe" asp-action="Index" class="btn btn-lezzet btn-lg">Tüm Tariflere Göz At</a>
+    </div>
+</section>
+
+<div class="container">
+    <h2 class="section-title">Öne Çıkan Tarifler</h2>
+    <div class="row">
+        @foreach (var r in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+                <div class="card recipe-card h-100 shadow-sm">
+                    <img src="@r.ImageUrl" class="card-img-top" alt="@r.Title"
+                         onerror="this.src='https://placehold.co/600x400?text=Tarif'">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title mb-0">@r.Title</h5>
+                            <span class="rating-badge">★ @r.Rating</span>
+                        </div>
+                        <p class="text-muted small">@r.Description</p>
+                        <p class="small mb-3">⏱ @(r.PrepTime + r.CookTime) dk &nbsp; 👥 @r.Servings kişilik</p>
+                        <a asp-controller="Recipe" asp-action="Details" asp-route-id="@r.Id" class="btn btn-lezzet">Tarife Git</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <h2 class="section-title">Kategoriler</h2>
+    <div class="row">
+        @foreach (var c in categories)
+        {
+            <div class="col-12 col-md-4 mb-4">
+                <a asp-controller="Category" asp-action="Details" asp-route-id="@c.Id" class="text-decoration-none">
+                    <div class="card category-card shadow-sm">
+                        <img src="@c.ImageUrl" class="card-img-top" alt="@c.Name"
+                             onerror="this.src='https://placehold.co/600x400?text=Kategori'">
+                        <div class="card-body text-center">
+                            <h5 class="text-dark mb-1">@c.Name</h5>
+                            <small class="text-muted">@c.Description</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
