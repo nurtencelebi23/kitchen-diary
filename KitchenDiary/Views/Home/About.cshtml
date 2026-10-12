@@ -2,23 +2,41 @@
     ViewData["Title"] = "Hakkımızda";
 }
 
-<div class="page-header">
-    <h1>Hakkımızda</h1>
-</div>
+<!-- Modern Üst Başlık Alanı (Ortalanmış ve Hizalanmış) -->
+<section class="bg-light py-5 mb-5 border-bottom">
+    <div class="container text-center">
+        <span class="badge bg-white text-dark px-3 py-2 rounded-pill shadow-sm mb-2 border">
+            📖 Proje Hikayesi
+        </span>
+        <h1 class="display-5 fw-bold text-dark mb-2">Hakkımızda</h1>
+        <p class="text-muted mb-0 fs-5">Kitchen Diary platformunun arkasındaki hikaye ve özellikler</p>
+    </div>
+</section>
 
-<div class="container my-5">
+<!-- İçerik Alanı (Container İçinde) -->
+<div class="container mb-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="info-box">
-                <h3>Lezzet Defteri Nedir?</h3>
-                <p>Lezzet Defteri, yemek severlerin tariflerini paylaştığı, kategorilere göre keşfettiği ve favorilerine eklediği bir tarif platformudur.</p>
-                <p>Bu proje, İleri Web Programlama dersi kapsamında ASP.NET Core MVC ile geliştirilmektedir ve her hafta yeni özelliklerle büyümektedir.</p>
-                <h5 class="mt-4">Planlanan Özellikler</h5>
-                <ul>
-                    <li>Üyelik ve rol bazlı yetkilendirme</li>
-                    <li>Tarif ekleme, düzenleme ve silme</li>
-                    <li>Yorum ve favori sistemi</li>
-                    <li>Admin yönetim paneli</li>
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4">
+                <h3 class="fw-bold text-dark mb-3">Kitchen Diary Nedir?</h3>
+                <p class="text-muted leading-relaxed mb-4">
+                    Kitchen Diary, yemek severlerin tariflerini paylaştığı, kategorilere göre keşfettiği ve favorilerine eklediği modern bir tarif platformudur.
+                </p>
+
+                <h4 class="fw-bold text-dark mb-3">Planlanan Özellikler</h4>
+                <ul class="list-unstyled mb-0 feature-list">
+                    <li class="py-2 border-bottom d-flex align-items-center gap-2">
+                        <span class="text-success fw-bold">✓</span> Üyelik ve rol bazlı yetkilendirme
+                    </li>
+                    <li class="py-2 border-bottom d-flex align-items-center gap-2">
+                        <span class="text-success fw-bold">✓</span> Tarif ekleme, düzenleme ve silme
+                    </li>
+                    <li class="py-2 border-bottom d-flex align-items-center gap-2">
+                        <span class="text-success fw-bold">✓</span> Yorum ve favori sistemi
+                    </li>
+                    <li class="py-2 d-flex align-items-center gap-2">
+                        <span class="text-success fw-bold">✓</span> Admin yönetim paneli
+                    </li>
                 </ul>
             </div>
         </div>

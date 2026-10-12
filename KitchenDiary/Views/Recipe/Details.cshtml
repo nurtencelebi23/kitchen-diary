@@ -3,49 +3,88 @@
     ViewData["Title"] = Model.Title;
 }
 
-<div class="page-header">
-    <h1>@Model.Title</h1>
-    <p class="mb-0">Kategori: @ViewBag.CategoryName</p>
-</div>
-
 <div class="container my-5">
-    <div class="row">
-        <div class="col-lg-7 mb-4">
-            <img src="@Model.ImageUrl" class="detail-img" alt="@Model.Title"
-                 onerror="this.src='https://placehold.co/800x500?text=Tarif'">
-            <p class="mt-3 lead">@Model.Description</p>
-        </div>
-
-        <div class="col-lg-5 mb-4">
-            <div class="info-box mb-4">
-                <h5>Tarif Bilgileri</h5>
-                <p class="mb-1">⏱ Hazırlık: @Model.PrepTime dk</p>
-                <p class="mb-1">🔥 Pişirme: @Model.CookTime dk</p>
-                <p class="mb-1">👥 @Model.Servings kişilik</p>
-                <p class="mb-0">★ Puan: <span class="rating-badge">@Model.Rating</span></p>
-            </div>
-
-            <div class="info-box">
-                <h5>Malzemeler</h5>
-                <ul>
-                    @foreach (var item in Model.Ingredients)
-                    {
-                        <li>@item</li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </div>
-
-    <div class="info-box">
-        <h5>Yapılışı</h5>
-        <ol>
-            @foreach (var step in Model.Steps)
-            {
-                <li class="mb-2">@step</li>
-            }
+    <!-- Breadcrumb / Üst Yönlendirme -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="link-brand">Ana Sayfa</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Recipe" asp-action="Index" class="link-brand">Tarifler</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
         </ol>
+    </nav>
+
+    <!-- Başlık Alanı (Sola kayma engellendi, hizalandı) -->
+    <div class="mb-4">
+        <h1 class="display-5 fw-bold text-dark mb-1">@Model.Title</h1>
     </div>
 
-    <a asp-action="Index" class="btn btn-lezzet mt-4">← Tariflere Dön</a>
+    <!-- Detay İçeriği -->
+    <div class="row g-4">
+        <!-- Sol Kolon: Görsel ve Açıklama -->
+        <div class="col-lg-7">
+            <div class="recipe-detail-img-container rounded-4 overflow-hidden shadow-sm mb-4">
+                <img src="@Model.ImageUrl" alt="@Model.Title" class="recipe-detail-img"
+                     onerror="this.src='https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&auto=format&fit=crop&q=80'">
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h4 class="fw-bold text-dark mb-3">📝 Tarif Hakkında</h4>
+                <p class="text-muted leading-relaxed mb-0">@Model.Description</p>
+            </div>
+        </div>
+
+        <!-- Sağ Kolon: Bilgi Kutusu ve Malzemeler -->
+        <div class="col-lg-5">
+            <!-- Tarif Özet Bilgileri -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">⏱️ Tarif Bilgileri</h5>
+                <div class="row g-3 text-center">
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <small class="text-muted d-block mb-1">Hazırlık</small>
+                            <span class="fw-bold text-dark fs-5">@Model.PrepTime dk</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <small class="text-muted d-block mb-1">Pişirme</small>
+                            <span class="fw-bold text-dark fs-5">@Model.CookTime dk</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <small class="text-muted d-block mb-1">Porsiyon</small>
+                            <span class="fw-bold text-dark fs-5">@Model.Servings kişilik</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 bg-light rounded-3">
+                            <small class="text-muted d-block mb-1">Puan</small>
+                            <span class="fw-bold text-dark fs-5">★ @Model.Rating</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Malzemeler Kutusu -->
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">🛒 Malzemeler</h5>
+                @if (Model.Ingredients != null && Model.Ingredients.Any())
+                {
+                    <ul class="list-unstyled mb-0 ingredient-list">
+                        @foreach (var ing in Model.Ingredients)
+                        {
+                            <li class="py-2 border-bottom d-flex align-items-center gap-2">
+                                <span class="text-success">✓</span> @ing
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted small mb-0">Malzeme bilgisi eklenmemiş.</p>
+                }
+            </div>
+        </div>
+    </div>
 </div>

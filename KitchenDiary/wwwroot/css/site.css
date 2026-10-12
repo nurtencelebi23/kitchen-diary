@@ -1,137 +1,180 @@
+/* Google Font İçe Aktarma */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
-    --turuncu: #e8710a;
-    --turuncu-koyu: #c25e00;
-    --yesil: #2f4f3a;
-    --krem: #fff8ef;
-    --yazi: #3a3a3a;
+    --brand-color: #0f766e; /* Lüks Zümrüt / Teal Yeşili (Turuncu YERİNE) */
+    --brand-hover: #0d9488;
+    --brand-light: #f0fdf4;
+    --text-main: #0f172a; /* Koyu Lacivert/Siyah Font */
+    --text-muted: #64748b;
+    --bg-page: #ffffff; /* Tamamen Temiz Beyaz Zemin */
+    --bg-surface: #f8fafc;
 }
 
 body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--krem);
-    color: var(--yazi);
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    letter-spacing: -0.01em;
 }
 
-.brand-font, h1, h2, h3, .section-title {
-    font-family: 'Playfair Display', serif;
+/* Font Değişikliği (Eski kaba fontları tamamen kaldırıyoruz) */
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 800 !important;
+    color: var(--text-main);
 }
 
-/* Navbar */
-.navbar-lezzet {
-    background-color: var(--yesil);
+/* --- Hero Section --- */
+.hero-section {
+    background: radial-gradient(circle at top left, #f0fdf4 0%, #ffffff 60%);
+    border-bottom: 1px solid #f1f5f9;
 }
 
-    .navbar-lezzet .nav-link:hover {
-        color: #ffd9a8;
-    }
-
-/* Hero */
-.hero {
-    background: linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)), url('/img/hero.jpg') center/cover no-repeat;
-    background-color: var(--yesil);
-    color: #fff;
-    padding: 130px 0;
-    text-align: center;
+.hero-badge {
+    background-color: #e6fffa;
+    color: var(--brand-color);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    border-radius: 100px;
+    border: 1px solid #b2f5ea;
 }
 
-    .hero h1 {
-        font-size: 3rem;
-        font-weight: 700;
-    }
-
-/* Bölüm başlıkları */
-.section-title {
-    color: var(--yesil);
-    text-align: center;
-    margin: 50px 0 30px;
-    position: relative;
+.hero-title {
+    font-size: 3.2rem;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
 }
 
-    .section-title::after {
-        content: "";
-        display: block;
-        width: 70px;
-        height: 4px;
-        background: var(--turuncu);
-        margin: 10px auto 0;
-        border-radius: 2px;
-    }
-
-/* Kartlar */
-.recipe-card, .category-card {
-    border: none;
-    border-radius: 16px;
-    overflow: hidden;
-    transition: transform .25s, box-shadow .25s;
+.highlight-text {
+    color: var(--brand-color);
 }
 
-    .recipe-card:hover, .category-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 12px 28px rgba(0,0,0,.15) !important;
-    }
-
-    .recipe-card .card-img-top, .category-card .card-img-top {
-        height: 210px;
-        object-fit: cover;
-    }
-
-.rating-badge {
-    background: var(--turuncu);
-    color: #fff;
-    border-radius: 20px;
-    padding: 3px 12px;
-    font-size: .85rem;
+.hero-subtitle {
+    font-size: 1.15rem;
+    color: var(--text-muted);
+    font-weight: 400;
 }
 
-/* Butonlar */
-.btn-lezzet {
-    background-color: var(--turuncu);
-    color: #fff;
-    border: none;
-    border-radius: 25px;
-    padding: 8px 22px;
-}
-
-    .btn-lezzet:hover {
-        background-color: var(--turuncu-koyu);
-        color: #fff;
-    }
-
-/* Detay sayfası */
-.detail-img {
+.hero-main-img {
+    height: 380px;
     width: 100%;
-    max-height: 420px;
     object-fit: cover;
-    border-radius: 18px;
 }
 
-.info-box {
-    background: #fff;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 4px 14px rgba(0,0,0,.08);
+.hero-floating-card {
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
 }
 
-.page-header {
-    background: var(--yesil);
-    color: #fff;
-    padding: 50px 0;
-    text-align: center;
+/* --- Kart Tasarımları --- */
+.recipe-card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Footer */
-.footer-lezzet {
-    background-color: var(--yesil);
-    color: #e9e9e9;
-}
-
-/* Mobil */
-@media (max-width: 768px) {
-    .hero {
-        padding: 80px 0;
+    .recipe-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 30px rgba(15, 118, 110, 0.08) !important;
+        border-color: #ccfbf1 !important;
     }
 
-        .hero h1 {
-            font-size: 2rem;
-        }
+.recipe-img {
+    height: 230px;
+    object-fit: cover;
+}
+
+.badge-rating {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(4px);
+    color: #0f172a;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 100px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* --- Modern Butonlar --- */
+.btn-brand-primary {
+    background-color: var(--brand-color);
+    color: #ffffff;
+    border-radius: 12px;
+    font-weight: 700;
+    padding: 12px 28px;
+    border: none;
+    transition: all 0.2s;
+}
+
+    .btn-brand-primary:hover {
+        background-color: var(--brand-hover);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(15, 118, 110, 0.25);
+    }
+
+.btn-brand-outline {
+    border: 1.5px solid #e2e8f0;
+    color: var(--text-main);
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 10px;
+    background: #ffffff;
+    transition: all 0.2s;
+}
+
+    .btn-brand-outline:hover {
+        background-color: var(--brand-color);
+        color: #ffffff;
+        border-color: var(--brand-color);
+    }
+
+.link-brand {
+    color: var(--brand-color);
+    text-decoration: none;
+}
+
+    .link-brand:hover {
+        color: var(--brand-hover);
+    }
+
+/* Metin Kısaltıcılar */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+/* Detay Sayfası Görsel Sınırlamaları */
+.recipe-detail-img-container {
+    width: 100%;
+    height: 380px; /* Görsel yüksekliği ideal seviyeye çekildi */
+    background-color: #f8fafc;
+}
+
+.recipe-detail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Resmi ezmeden kutuya tam sığdırır */
+}
+
+.style-instructions {
+    white-space: pre-line;
+    line-height: 1.8;
+}
+
+.ingredient-list li:last-child {
+    border-bottom: none !important;
+}
+/* Tarif ve Kategori Resim Boyutlarını Sabitleme */
+.recipe-img, .category-card-img {
+    height: 190px !important; /* Yüksekliği sabitliyoruz */
+    max-height: 190px !important;
+    width: 100% !important;
+    object-fit: cover !important;
 }

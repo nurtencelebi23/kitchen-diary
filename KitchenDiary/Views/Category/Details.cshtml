@@ -1,28 +1,55 @@
 ﻿@model List<Recipe>
 @{
-    var category = (Category)ViewBag.Category;
-    ViewData["Title"] = category.Name;
+    var category = ViewBag.Category as Category;
+    ViewData["Title"] = category?.Name ?? "Kategori Tarifleri";
 }
 
-<div class="page-header">
-    <h1>@category.Name</h1>
-    <p class="mb-0">@category.Description</p>
-</div>
+<!-- Başlık Alanı (Ortalanmış ve Hizalanmış) -->
+<section class="bg-light py-5 mb-5 border-bottom">
+    <div class="container text-center">
+        <!-- Üst Yönlendirme -->
+        <nav aria-label="breadcrumb" class="d-inline-block mb-3">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="link-brand">Ana Sayfa</a></li>
+                <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Index" class="link-brand">Kategoriler</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@(category?.Name ?? "Tarifler")</li>
+            </ol>
+        </nav>
 
-<div class="container my-5">
-    @if (Model.Any())
+        <h1 class="display-5 fw-bold text-dark mb-2">@(category?.Name ?? "Kategori Tarifleri")</h1>
+        <p class="text-muted mb-0 fs-5">@(category?.Description ?? "Bu kategoriye ait en lezzetli tarifler")</p>
+    </div>
+</section>
+
+<!-- Tarif Listesi (Container İçinde) -->
+<div class="container mb-5">
+    @if (Model != null && Model.Any())
     {
-        <div class="row">
+        <div class="row g-4">
             @foreach (var r in Model)
             {
-                <div class="col-12 col-md-6 col-lg-4 mb-4">
-                    <div class="card recipe-card h-100 shadow-sm">
-                        <img src="@r.ImageUrl" class="card-img-top" alt="@r.Title"
-                             onerror="this.src='https://placehold.co/600x400?text=Tarif'">
-                        <div class="card-body">
-                            <h5 class="card-title">@r.Title</h5>
-                            <p class="text-muted small">@r.Description</p>
-                            <a asp-controller="Recipe" asp-action="Details" asp-route-id="@r.Id" class="btn btn-lezzet">Tarife Git</a>
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card recipe-card h-100 border-0 rounded-4 overflow-hidden shadow-sm">
+                        <div class="position-relative">
+                            <img src="@r.ImageUrl" class="card-img-top recipe-img" alt="@r.Title"
+                                 onerror="this.src='https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&auto=format&fit=crop&q=80'">
+                            <span class="badge-rating position-absolute top-0 end-0 m-3">
+                                ★ @r.Rating
+                            </span>
+                        </div>
+
+                        <div class="card-body d-flex flex-column p-4">
+                            <h5 class="card-title fw-bold text-dark mb-2">@r.Title</h5>
+                            <p class="card-text text-muted small flex-grow-1 line-clamp-2">@r.Description</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-3 text-muted small">
+                                <span>⏱ @(r.PrepTime + r.CookTime) dk</span>
+                                <span>👥 @r.Servings kişilik</span>
+                            </div>
+
+                            <a asp-controller="Recipe" asp-action="Details" asp-route-id="@r.Id" class="btn btn-brand-outline w-100 mt-3">
+                                Tarife Git
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -31,8 +58,13 @@
     }
     else
     {
-        <div class="alert alert-warning">Bu kategoride henüz tarif yok.</div>
+        <div class="text-center py-5">
+            <div class="fs-1 mb-3">🍲</div>
+            <h4 class="fw-bold text-dark mb-2">Henüz bu kategoride tarif yok</h4>
+            <p class="text-muted mb-4">Bu kategoriye ilk tarifi ekleyen sen olmak ister misin?</p>
+            <a asp-controller="Recipe" asp-action="Index" class="btn btn-brand-primary">
+                Diğer Tariflere Göz At
+            </a>
+        </div>
     }
-
-    <a asp-action="Index" class="btn btn-lezzet mt-3">← Kategorilere Dön</a>
 </div>
