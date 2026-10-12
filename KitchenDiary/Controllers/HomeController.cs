@@ -1,5 +1,5 @@
 using KitchenDiary.Models;
-using LezzetDefteri.Data;
+using KitchenDiary.Data;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

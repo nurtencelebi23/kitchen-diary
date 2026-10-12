@@ -1,4 +1,4 @@
-﻿using LezzetDefteri.Data;
+﻿using KitchenDiary.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KitchenDiary.Controllers

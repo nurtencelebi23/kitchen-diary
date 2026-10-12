@@ -1,7 +1,7 @@
 ﻿
 using KitchenDiary.Models;
 
-namespace LezzetDefteri.Data
+namespace KitchenDiary.Data
 {
     public static class FakeData
     {
