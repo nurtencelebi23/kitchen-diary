@@ -11,7 +11,8 @@
         public double Rating { get; set; }     // Puan (0-5)
         public string ImageUrl { get; set; } = string.Empty;
         public int CategoryId { get; set; }
-        public List<string> Ingredients { get; set; } = new();
-        public List<string> Steps { get; set; } = new();
+        public Category? Category { get; set; }
+        public List<Ingredient> Ingredients { get; set; } = new();
+        public List<RecipeStep> Steps { get; set; } = new();
     }
 }

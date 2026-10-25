@@ -1,4 +1,5 @@
-﻿using KitchenDiary.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using KitchenDiary.Data;
 using KitchenDiary.Models;
 using Microsoft.AspNetCore.Mvc;
 /* SelectList kullanmak için eklendi */
@@ -9,23 +10,32 @@ namespace KitchenDiary.Controllers
 {
     public class RecipeController : Controller
     {
+        private readonly AppDbContext _context;
+
+        public RecipeController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         // /Recipe veya /Recipe/Index
         public IActionResult Index()
         {
-            return View(FakeData.Recipes);
+            return View(_context.Recipes.ToList());
         }
 
         // /Recipe/Details/3
         public IActionResult Details(int id)
         {
-            var recipe = FakeData.Recipes.FirstOrDefault(r => r.Id == id);
+            var recipe = _context.Recipes
+                .Include(r => r.Category)
+                .Include(r => r.Ingredients)
+                .Include(r => r.Steps)
+                .FirstOrDefault(r => r.Id == id);
+
             if (recipe == null)
             {
                 return NotFound();
             }
-
-            ViewBag.CategoryName = FakeData.Categories
-                .FirstOrDefault(c => c.Id == recipe.CategoryId)?.Name;
 
             return View(recipe);
         }
@@ -39,44 +49,48 @@ namespace KitchenDiary.Controllers
         {
             // Açılır liste için: "Id" arka planda gönderilen değer, "Name" ekranda görünen yazı.
             //Kategori ismini, Tarifte tutmadığımız için
-            ViewBag.Categories = new SelectList(FakeData.Categories, "Id", "Name");
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
 
             // Form boş bir ViewModel nesnesine bağlanır.
             return View(new RecipeCreateViewModel());
         }
 
         // POST: /Recipe/Create
-        // Form gönderilince çalışır: ViewModel'i Recipe'ye çevirip listeye ekler.
-        // Malzemeler ve adımlar formdan tek bir metin olarak gelir; Recipe sınıfı
-        // List<string> beklediği için Split ile satırlardan bölüp ToList ile listeye çeviriyoruz.
+        // Form gönderilince çalışır: ViewModel'i Recipe'ye çevirip veritabanına kaydeder.
+        // Malzemeler ve adımlar formdan tek metin olarak gelir; satırlara bölüp
+        // Ingredient ve RecipeStep nesnelerine çeviriyoruz.
         [HttpPost]
         public IActionResult Create(RecipeCreateViewModel model)
         {
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Categories = new SelectList(FakeData.Categories, "Id", "Name");
+                ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
                 return View(model);
             }
 
             var recipe = new Recipe
             {
-                Id = FakeData.Recipes.Max(r => r.Id) + 1,
                 Title = model.Title,
                 Description = model.Description,
-                PrepTime = model.PrepTime,
-                CookTime = model.CookTime,
-                Servings = model.Servings,
-                CategoryId = model.CategoryId,
+                PrepTime = model.PrepTime.Value,
+                CookTime = model.CookTime.Value,
+                Servings = model.Servings.Value,
+                CategoryId = model.CategoryId.Value,
                 Rating = 0,
-                ImageUrl = "https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&auto=format&fit=crop&q=80",
+                ImageUrl = _context.Categories.Find(model.CategoryId)?.ImageUrl ?? "",
                 Ingredients = model.IngredientsText
-                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList(),
+                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(m => new Ingredient { Text = m.Trim() })
+                    .ToList(),
                 Steps = model.StepsText
-                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToList()
+                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select((m, i) => new RecipeStep { StepNumber = i + 1, Text = m.Trim() })
+                    .ToList()
             };
 
-            FakeData.Recipes.Add(recipe);
+            _context.Recipes.Add(recipe);
+            _context.SaveChanges();
 
             return RedirectToAction("Index");
         }

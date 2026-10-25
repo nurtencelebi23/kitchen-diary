@@ -10,7 +10,7 @@
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="link-brand">Ana Sayfa</a></li>
             <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Index" class="link-brand">Kategoriler</a></li>
             <!--kategori ismi -->
-            <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Details" asp-route-id="@Model.CategoryId" class="link-brand">@ViewBag.CategoryName</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Details" asp-route-id="@Model.CategoryId" class="link-brand">@Model.Category?.Name</a></li>
             <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
         </ol>
     </nav>
@@ -42,10 +42,10 @@
                 @if (Model.Steps != null && Model.Steps.Any())
                 {
                     <ul class="list-unstyled mb-0 step-list">
-                        @for (int i = 0; i < Model.Steps.Count; i++)
+                        @foreach (var step in Model.Steps.OrderBy(s => s.StepNumber))
                         {
                             <li class="mb-2">
-                                <strong>@(i + 1). adım:</strong> @Model.Steps[i]
+                                <strong>@step.StepNumber. adım:</strong> @step.Text
                             </li>
                         }
                     </ul>
@@ -101,7 +101,7 @@
                         @foreach (var ing in Model.Ingredients)
                         {
                             <li class="py-2 border-bottom d-flex align-items-center gap-2">
-                                <span class="text-success">✓</span> @ing
+                                <span class="text-success">✓</span> @ing.Text
                             </li>
                         }
                     </ul>

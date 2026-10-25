@@ -15,18 +15,18 @@ namespace KitchenDiary.Models
 
         [Required(ErrorMessage = "Hazırlama süresi girilmelidir.")]
         [Range(0, 1000, ErrorMessage = "Hazırlama süresi 0 ile 1000 dakika arasında olmalıdır.")]
-        public int PrepTime { get; set; }
+        public int? PrepTime { get; set; }
 
         [Required(ErrorMessage = "Pişirme süresi girilmelidir.")]
         [Range(0, 1000, ErrorMessage = "Pişirme süresi 0 ile 1000 dakika arasında olmalıdır.")]
-        public int CookTime { get; set; }
+        public int? CookTime { get; set; }
 
         [Required(ErrorMessage = "Porsiyon sayısı girilmelidir.")]
         [Range(1, 100, ErrorMessage = "Porsiyon 1 ile 100 arasında olmalıdır.")]
-        public int Servings { get; set; }
+        public int? Servings { get; set; }
 
         [Required(ErrorMessage = "Lütfen bir kategori seçin.")]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         [Required(ErrorMessage = "En az bir malzeme girilmelidir.")]
         public string IngredientsText { get; set; } = "";
