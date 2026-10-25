@@ -1,0 +1,14 @@
+﻿@model List<Category>
+
+<div class="container mb-5">
+    <h2 class="section-title mb-3">Kategoriler</h2>
+    <div class="d-flex flex-wrap gap-2">
+        @foreach (var c in Model)
+        {
+            <a asp-controller="Category" asp-action="Details" asp-route-id="@c.Id"
+               class="btn btn-brand-outline rounded-pill px-4">
+                @c.Name
+            </a>
+        }
+    </div>
+</div>

@@ -1,0 +1,67 @@
+﻿@model RecipeCreateViewModel
+@{
+    ViewData["Title"] = "Yeni Tarif Ekle";
+}
+
+<div class="container my-5">
+    <h1 class="fw-bold mb-4">Yeni Tarif Ekle</h1>
+    @* BeginForm: <form> etiketini üretir, gönderilince Recipe/Create (POST) çalışır *@
+    @* LabelFor: kutunun yanındaki etiket yazısını (<label>) üretir *@
+    @* TextBoxFor: tek satırlık metin/sayı kutusu *@
+    @* TextAreaFor: çok satırlı kutu (açıklama, malzemeler, adımlar) *@
+    @* DropDownListFor: kategori için açılır liste *@
+    @* ValidationMessageFor: Hata mesajları *@
+
+    @using (Html.BeginForm("Create", "Recipe", FormMethod.Post))
+    {
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Title, "Başlık", new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger small" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.Description, "Açıklama", new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 3 })
+            @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger small" })
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                @Html.LabelFor(m => m.PrepTime, "Hazırlama (dk)", new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.PrepTime, new { @class = "form-control", type = "number", min = "0" })
+                @Html.ValidationMessageFor(m => m.PrepTime, "", new { @class = "text-danger small" })
+            </div>
+            <div class="col-md-4 mb-3">
+                @Html.LabelFor(m => m.CookTime, "Pişirme (dk)", new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.CookTime, new { @class = "form-control", type = "number", min = "0" })
+                @Html.ValidationMessageFor(m => m.CookTime, "", new { @class = "text-danger small" })
+            </div>
+            <div class="col-md-4 mb-3">
+                @Html.LabelFor(m => m.Servings, "Kaç kişilik", new { @class = "form-label" })
+                @Html.TextBoxFor(m => m.Servings, new { @class = "form-control", type = "number", min = "1" })
+                @Html.ValidationMessageFor(m => m.Servings, "", new { @class = "text-danger small" })
+            </div>
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.CategoryId, "Kategori", new { @class = "form-label" })
+            @Html.DropDownListFor(m => m.CategoryId, (SelectList)ViewBag.Categories, "Kategori seçin", new { @class = "form-select" })
+            @Html.ValidationMessageFor(m => m.CategoryId, "", new { @class = "text-danger small" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.IngredientsText, "Malzemeler (her satıra bir malzeme)", new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.IngredientsText, new { @class = "form-control", rows = 5 })
+            @Html.ValidationMessageFor(m => m.IngredientsText, "", new { @class = "text-danger small" })
+        </div>
+
+        <div class="mb-3">
+            @Html.LabelFor(m => m.StepsText, "Hazırlanışı (her satıra bir adım)", new { @class = "form-label" })
+            @Html.TextAreaFor(m => m.StepsText, new { @class = "form-control", rows = 5 })
+            @Html.ValidationMessageFor(m => m.StepsText, "", new { @class = "text-danger small" })
+        </div>
+
+        <button type="submit" class="btn btn-brand-primary px-4">Kaydet</button>
+    }
+</div>

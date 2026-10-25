@@ -8,7 +8,9 @@
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="link-brand">Ana Sayfa</a></li>
-            <li class="breadcrumb-item"><a asp-controller="Recipe" asp-action="Index" class="link-brand">Tarifler</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Index" class="link-brand">Kategoriler</a></li>
+            <!--kategori ismi -->
+            <li class="breadcrumb-item"><a asp-controller="Category" asp-action="Details" asp-route-id="@Model.CategoryId" class="link-brand">@ViewBag.CategoryName</a></li>
             <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
         </ol>
     </nav>
@@ -30,6 +32,30 @@
             <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
                 <h4 class="fw-bold text-dark mb-3">📝 Tarif Hakkında</h4>
                 <p class="text-muted leading-relaxed mb-0">@Model.Description</p>
+            </div>
+            <!-- Tarifin hazırlanışını -->
+            <div class="card border-0 shadow-sm rounded-4 p-4">
+                <h5 class="fw-bold text-dark mb-3 border-bottom pb-2">
+                    👨‍🍳 Hazırlanışı
+                </h5>
+
+                @if (Model.Steps != null && Model.Steps.Any())
+                {
+                    <ul class="list-unstyled mb-0 step-list">
+                        @for (int i = 0; i < Model.Steps.Count; i++)
+                        {
+                            <li class="mb-2">
+                                <strong>@(i + 1). adım:</strong> @Model.Steps[i]
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted small mb-0">
+                        Hazırlanış adımı eklenmemiş.
+                    </p>
+                }
             </div>
         </div>
 

@@ -15,7 +15,6 @@ namespace KitchenDiary.Controllers
                 .Take(3)
                 .ToList();
 
-            ViewBag.Categories = FakeData.Categories;
             return View(featured);
         }
 
