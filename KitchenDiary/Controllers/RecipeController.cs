@@ -3,18 +3,23 @@ using KitchenDiary.Data;
 using KitchenDiary.Models;
 using Microsoft.AspNetCore.Mvc;
 /* SelectList kullanmak için eklendi */
-using Microsoft.AspNetCore.Mvc.Rendering; 
-
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting; // IWebHostEnvironment için eklendi
+using System.IO;
 
 namespace KitchenDiary.Controllers
 {
     public class RecipeController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment; // 1. Ortam servisi tanımlandı
 
-        public RecipeController(AppDbContext context)
+        // 2. Constructor içine eklendi (Dependency Injection)
+        public RecipeController(AppDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // /Recipe veya /Recipe/Index
@@ -69,30 +74,68 @@ namespace KitchenDiary.Controllers
                 return View(model);
             }
 
-            var recipe = new Recipe
+            try
             {
-                Title = model.Title,
-                Description = model.Description,
-                PrepTime = model.PrepTime.Value,
-                CookTime = model.CookTime.Value,
-                Servings = model.Servings.Value,
-                CategoryId = model.CategoryId.Value,
-                Rating = 0,
-                ImageUrl = _context.Categories.Find(model.CategoryId)?.ImageUrl ?? "",
-                Ingredients = model.IngredientsText
-                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(m => new Ingredient { Text = m.Trim() })
-                    .ToList(),
-                Steps = model.StepsText
-                    .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select((m, i) => new RecipeStep { StepNumber = i + 1, Text = m.Trim() })
-                    .ToList()
-            };
+                string imageUrl = "";
 
-            _context.Recipes.Add(recipe);
-            _context.SaveChanges();
+                // Kullanıcı özel bir görsel yüklediyse:
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    // IWebHostEnvironment kullanarak wwwroot yolunu güvenle alıyoruz
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "recipes");
 
-            return RedirectToAction("Index");
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ImageFile.FileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        model.ImageFile.CopyTo(fileStream);
+                    }
+
+                    imageUrl = "/images/recipes/" + uniqueFileName;
+                }
+                else
+                {
+                    // Görsel yüklemediyse mevcut kategori görselini al
+                    imageUrl = _context.Categories.Find(model.CategoryId)?.ImageUrl ?? "";
+                }
+
+                var recipe = new Recipe
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    PrepTime = model.PrepTime ?? 0,
+                    CookTime = model.CookTime ?? 0,
+                    Servings = model.Servings ?? 1,
+                    CategoryId = model.CategoryId ?? 0,
+                    Rating = 0,
+                    ImageUrl = imageUrl,
+                    Ingredients = model.IngredientsText
+                        .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(m => new Ingredient { Text = m.Trim() })
+                        .ToList(),
+                    Steps = model.StepsText
+                        .Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select((m, i) => new RecipeStep { StepNumber = i + 1, Text = m.Trim() })
+                        .ToList()
+                };
+
+                _context.Recipes.Add(recipe);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
+                ModelState.AddModelError("", "Resim kaydedilirken hata oluştu: " + ex.Message);
+                return View(model);
+            }
         }
     }
 }

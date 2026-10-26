@@ -11,8 +11,9 @@
     @* TextAreaFor: çok satırlı kutu (açıklama, malzemeler, adımlar) *@
     @* DropDownListFor: kategori için açılır liste *@
     @* ValidationMessageFor: Hata mesajları *@
+    @* Dosya yükleyebilmek için Html.BeginForm içerisine htmlAttributes ekledik *@
 
-    @using (Html.BeginForm("Create", "Recipe", FormMethod.Post))
+    @using (Html.BeginForm("Create", "Recipe", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div class="mb-3">
             @Html.LabelFor(m => m.Title, "Başlık", new { @class = "form-label" })
@@ -48,6 +49,13 @@
             @Html.LabelFor(m => m.CategoryId, "Kategori", new { @class = "form-label" })
             @Html.DropDownListFor(m => m.CategoryId, (SelectList)ViewBag.Categories, "Kategori seçin", new { @class = "form-select" })
             @Html.ValidationMessageFor(m => m.CategoryId, "", new { @class = "text-danger small" })
+        </div>
+
+        @* YENİ: Özel Görsel Yükleme Alanı (Boş bırakılırsa kategori görseli atanır) *@
+        <div class="mb-3">
+            @Html.LabelFor(m => m.ImageFile, "Tarif Görseli (İsteğe bağlı - Yüklemezseniz kategori görseli atanır)", new { @class = "form-label" })
+            @Html.TextBoxFor(m => m.ImageFile, new { @class = "form-control", type = "file", accept = "image/*" })
+            @Html.ValidationMessageFor(m => m.ImageFile, "", new { @class = "text-danger small" })
         </div>
 
         <div class="mb-3">

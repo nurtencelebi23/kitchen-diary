@@ -1,6 +1,7 @@
 ﻿/*
     Burada kullanıcıdan alınan bilgilerle yeni tarif oluşturmak için gereken bileşenler var
 */
+using Microsoft.AspNetCore.Http; // IFormFile için gerekli
 using System.ComponentModel.DataAnnotations;
 
 namespace KitchenDiary.Models
@@ -33,5 +34,8 @@ namespace KitchenDiary.Models
 
         [Required(ErrorMessage = "En az bir hazırlanış adımı girilmelidir.")]
         public string StepsText { get; set; } = "";
+
+        // YENİ: Kullanıcı dosya yüklerse buraya gelecek (Zorunlu değil, yüklemezse kategori görseli kalabilir)
+        public IFormFile? ImageFile { get; set; }
     }
 }
